@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  jeu. 03 sep. 2020 à 16:02
+-- Généré le :  jeu. 03 sep. 2020 à 17:35
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -29,11 +29,21 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `bankaccount` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `iban` varchar(32) NOT NULL,
   `bankName` varchar(32) NOT NULL,
-  `user_id` varchar(32) NOT NULL
+  `user_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `bankaccount`
+--
+
+INSERT INTO `bankaccount` (`id`, `iban`, `bankName`, `user_id`) VALUES
+('46686e14-be32-4c84-a966-bfabee828d82', 'EN11119303912-394865-830134K', 'Bank of china', '9785e36f-ae2c-4953-bd22-f4e242012cff'),
+('a952e49c-54bf-4e7d-84f4-4458c7432442', 'EN584944-494857-890000-72714S', 'SuperBank', 'b9a85f0e-8e27-4203-a717-e241ed4c8fb9'),
+('e4af3ee4-db0f-49e8-b656-6f77854ebb10', 'FR1294585-945958-930283-84NF', 'Bank of america', 'bbcd4322-7c5a-445a-ae57-54c29e8d52b4'),
+('e9e6f974-b304-4d61-be70-7b108f925207', 'FR8593859021-86948392-85937HG', 'Bank of america', 'e4af3ee4-db0f-49e8-b656-6f77854ebb10');
 
 -- --------------------------------------------------------
 
@@ -42,9 +52,20 @@ CREATE TABLE `bankaccount` (
 --
 
 CREATE TABLE `contact_user` (
-  `user_id` varchar(32) NOT NULL,
-  `contact_id` varchar(32) NOT NULL
+  `user_id` varchar(36) NOT NULL,
+  `contact_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `contact_user`
+--
+
+INSERT INTO `contact_user` (`user_id`, `contact_id`) VALUES
+('b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'bbcd4322-7c5a-445a-ae57-54c29e8d52b4'),
+('b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'e4af3ee4-db0f-49e8-b656-6f77854ebb10'),
+('e4af3ee4-db0f-49e8-b656-6f77854ebb10', '9785e36f-ae2c-4953-bd22-f4e242012cff'),
+('e4af3ee4-db0f-49e8-b656-6f77854ebb10', 'b9a85f0e-8e27-4203-a717-e241ed4c8fb9'),
+('9785e36f-ae2c-4953-bd22-f4e242012cff', 'bbcd4322-7c5a-445a-ae57-54c29e8d52b4');
 
 -- --------------------------------------------------------
 
@@ -53,14 +74,22 @@ CREATE TABLE `contact_user` (
 --
 
 CREATE TABLE `transaction` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `cashAmount` double NOT NULL,
-  `date` date NOT NULL,
+  `date` datetime NOT NULL,
   `currency` varchar(10) NOT NULL,
   `description` text NOT NULL,
-  `senderUser_id` varchar(32) NOT NULL,
-  `beneficiaryUser_id` varchar(32) NOT NULL
+  `senderUser_id` varchar(36) NOT NULL,
+  `beneficiaryUser_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `transaction`
+--
+
+INSERT INTO `transaction` (`id`, `cashAmount`, `date`, `currency`, `description`, `senderUser_id`, `beneficiaryUser_id`) VALUES
+('725e6436-b38b-4062-a191-f7d4dde4131a', 50, '2020-09-01 15:20:27', 'Dollar', 'Money for your birthday', 'b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'bbcd4322-7c5a-445a-ae57-54c29e8d52b4'),
+('8b2ed43b-26d8-41f9-b76d-5696489910bf', 120, '2020-09-02 20:35:05', 'Dollar', 'Thanks for the credits buddy', 'b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'e4af3ee4-db0f-49e8-b656-6f77854ebb10');
 
 -- --------------------------------------------------------
 
@@ -69,14 +98,24 @@ CREATE TABLE `transaction` (
 --
 
 CREATE TABLE `user` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `email` varchar(32) NOT NULL,
   `password` varchar(50) NOT NULL,
   `lastName` varchar(32) NOT NULL,
   `firstName` varchar(32) NOT NULL,
   `cashAmount` double NOT NULL,
-  `bankAccount_id` varchar(32) NOT NULL
+  `bankAccount_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `password`, `lastName`, `firstName`, `cashAmount`, `bankAccount_id`) VALUES
+('9785e36f-ae2c-4953-bd22-f4e242012cff', 'louise.holy@mail.com', 'hskser94JLn8:', 'Holy', 'Louise', 294, '46686e14-be32-4c84-a966-bfabee828d82'),
+('b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'denis.wilson@mail.com', 'passw0rd', 'Wilson', 'Denis', 500, 'a952e49c-54bf-4e7d-84f4-4458c7432442'),
+('bbcd4322-7c5a-445a-ae57-54c29e8d52b4', 'clark.gaby@mail.com', 'wos87Hil*', 'Clark', 'Gaby', 2000, 'e4af3ee4-db0f-49e8-b656-6f77854ebb10'),
+('e4af3ee4-db0f-49e8-b656-6f77854ebb10', 'luckyluc@mail.com', 'jdueLKDn872', 'Lucky', 'Luc', 499, 'e9e6f974-b304-4d61-be70-7b108f925207');
 
 --
 -- Index pour les tables déchargées
