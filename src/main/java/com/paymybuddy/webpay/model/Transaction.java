@@ -3,6 +3,7 @@ package com.paymybuddy.webpay.model;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Transaction {
 	private User senderUser;
 	
 	@ManyToOne
-	private User beneficaryUser;
+	private User beneficiaryUser;
 	
 	private Double cashAmount;
 	private Currency currency;
