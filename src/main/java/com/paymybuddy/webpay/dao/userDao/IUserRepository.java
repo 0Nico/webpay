@@ -22,4 +22,6 @@ public interface IUserRepository {
 
 	void deleteById(UUID id);
 
+	User findByEmail(String email);
+
 }

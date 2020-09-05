@@ -63,7 +63,7 @@ public class UserService {
 	   
 	   Transaction transaction = new Transaction();
 	   transaction.setCashAmount(cashAmount);
-	   transaction.setBeneficaryUser(beneficiary);
+	   transaction.setBeneficiaryUser(beneficiary);
 	   transaction.setSenderUser(user);
 	   transaction.setDescription(description);
 	   transaction.setDate(new Date());
@@ -87,8 +87,6 @@ public class UserService {
 	   bankAccount.setOwner(user);
 	   bankService.createBankAccount(bankAccount);
 	   
-	   user.setBankAccount(bankAccount);
-	   updateUser(user);
    }
     
 }

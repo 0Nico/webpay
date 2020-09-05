@@ -3,6 +3,7 @@ package com.paymybuddy.webpay.model;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,19 +32,20 @@ public class User {
 	private UUID id;
 	
 	private String lastName;
+	
 	private String firstName;
 	
 	private String email;
 	private String password;
+	
 	private Double cashAmount;
+	
+	private String role;
 	
 	@ManyToMany
 	private List<User> contacts;
 	
-	@OneToOne
-	private BankAccount bankAccount;
 	
-	@OneToMany
-	private List<Transaction> transactions;
+
 	
 }

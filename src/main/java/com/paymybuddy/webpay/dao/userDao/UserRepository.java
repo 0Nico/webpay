@@ -5,9 +5,11 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
+import com.paymybuddy.webpay.model.Transaction;
 import com.paymybuddy.webpay.model.User;
 
 @Repository
@@ -47,4 +49,17 @@ public class UserRepository implements IUserRepository{
 	      User user = findOne( id );
 	      delete( user );
 	   }
+
+	@Override
+	public User findByEmail(String email) {
+		Query q = entityManager.createQuery("select u from User u where u.email = :email");
+		q.setParameter("email", email);
+	    List<User> result = q.getResultList();
+	    if (result.isEmpty()) {
+	          return null;
+	      }
+	    return result.get(0);
+	      
+	}
+	
 }

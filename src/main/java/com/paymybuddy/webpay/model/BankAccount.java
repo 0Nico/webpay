@@ -2,6 +2,7 @@ package com.paymybuddy.webpay.model;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "bankAccount")
+@Table(name = "bankaccount")
 public class BankAccount {
 
 	@Id
@@ -31,5 +32,6 @@ public class BankAccount {
 	private User owner;
 	
 	private String iban;
+	
 	private String bankName;
 }
