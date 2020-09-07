@@ -1,8 +1,9 @@
 package com.paymybuddy.webpay.service;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,83 +11,83 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.paymybuddy.webpay.dao.userDao.IUserRepository;
-import com.paymybuddy.webpay.model.BankAccount;
-import com.paymybuddy.webpay.model.Currency;
-import com.paymybuddy.webpay.model.Transaction;
 import com.paymybuddy.webpay.model.User;
+import com.paymybuddy.webpay.model.dto.UserDto;
 
 @Service
 public class UserService {
 
 	@Autowired
 	IUserRepository userRepository;
-	
-	@Autowired
-	TransactionService transactionService;
+
 	
 	@Autowired
 	BankAccountService bankService;
 	
 	
-	public void createUser(User user) {
+	public User createUser(User user) {
+		user.setCashAmount(0.0);
 		userRepository.create(user);
+		return userRepository.findOne(user.getId());
     }
  
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    public List<String> getAllEmailUser() {
+        return userRepository.findAll().stream().map(User::getEmail).collect(Collectors.toList());
     }
  
-    public User getUser(String id) {
-        return userRepository.findOne(UUID.fromString(id));
+    public UserDto getUser(UUID id) {
+    	
+    	User user = userRepository.findOne(id);
+    	UserDto userDto = new UserDto();
+   		userDto.setEmail(user.getEmail());
+   		userDto.setFirstName(user.getFirstName());
+   		userDto.setLastName(user.getLastName());
+   		userDto.setCashAmount(user.getCashAmount());
+        return userDto;
+    }
+    
+    
+    public UserDto getFriendDetails(User user, String email) {
+    	
+    	User friend = user.getContacts().stream().filter(usr -> usr.getEmail().equals(email)).findAny()
+    			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Friend Does Not Exist"));
+
+   		UserDto userDto = new UserDto();
+   		userDto.setEmail(email);
+   		userDto.setFirstName(friend.getFirstName());
+   		userDto.setLastName(friend.getLastName());
+        return userDto;
     }
     
     public User updateUser(User user) {
-        return userRepository.update(user);
+    	if (user != null) {
+    		return userRepository.update(user);
+    	} else {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User could Not Be Null");
+    	}
     }
 
     public void deleteUser(User user) {
     	userRepository.delete(user);
     }
     
-    public List<User> addContact(User user, User newContact){
-    	user.getContacts().add(newContact);
-    	return user.getContacts();
+    public void addContact(User user, String email){	
+    	User contact = userRepository.findByEmail(email);
+    	if(contact!= null) {
+    		user.getContacts().add(contact);
+    		updateUser(user);
+    	} else {
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact Not Found");
+    	}
     }
     
-    public User getUserByEmail(String email) {
-    	return getAllUser().stream().filter(user -> user.getEmail().equals(email)).findAny().orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
-    }
     
     
-   public void sendMoney(User user, User beneficiary, Double cashAmount, Currency currency, String description) {
-	   
-	   Transaction transaction = new Transaction();
-	   transaction.setCashAmount(cashAmount);
-	   transaction.setBeneficiaryUser(beneficiary);
-	   transaction.setSenderUser(user);
-	   transaction.setDescription(description);
-	   transaction.setDate(new Date());
-	   transaction.setCurrency(currency);
-	   
-	   if(user.getCashAmount()>= cashAmount) {
-		   user.setCashAmount(user.getCashAmount() - cashAmount);
-		   beneficiary.setCashAmount(beneficiary.getCashAmount() + cashAmount);
-		   updateUser(user);
-		   updateUser(beneficiary);
-		   transactionService.createTransaction(transaction);
-	   }
-	   
-   }
    
-   public void addBankAccount(User user, String iban, String bankName) {
+   
+   public List<String> getAllFriends(User user){
 	   
-	   BankAccount bankAccount = new BankAccount();
-	   bankAccount.setIban(iban);
-	   bankAccount.setBankName(bankName);
-	   bankAccount.setOwner(user);
-	   bankService.createBankAccount(bankAccount);
-	   
+	   return user.getContacts().stream().map(User::getEmail).collect(Collectors.toList());
    }
     
 }
