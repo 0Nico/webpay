@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,7 +29,7 @@ public class BankAccount {
     )
 	private UUID id;
 	
-	@OneToOne
+	@ManyToOne
 	private User owner;
 	
 	private String iban;

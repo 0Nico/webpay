@@ -23,8 +23,7 @@ public interface ITransactionRepository {
 
 	Transaction findOne(UUID id);
 	
-	public List<Transaction> findBySender_Id(@Param("idsender") UUID idsender);
+	public List<Transaction> findByUser(@Param("id") UUID idsender);
 	
-	public List<Transaction> findByBeneficiary_Id(@Param("idbeneficiary") UUID idbeneficiary);
 
 }

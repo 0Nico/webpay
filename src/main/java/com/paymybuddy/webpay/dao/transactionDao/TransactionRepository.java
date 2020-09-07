@@ -49,19 +49,12 @@ public class TransactionRepository implements ITransactionRepository{
 	      delete( transaction );
 	   }
 
+	   
 	   @Override
-	   public List<Transaction> findBySender_Id(UUID idsender) {
-		  Query q = entityManager.createQuery("select t from Transaction t where t.senderUser.id = :idsender");
-		  q.setParameter("idsender", idsender);
-	      List<Transaction> results = q.getResultList();
-	      return results;
-	   }
-	
-	   @Override
-	   public List<Transaction> findByBeneficiary_Id(UUID idbeneficiary) {
-		  Query q = entityManager.createQuery("select t from Transaction t where t.senderBeneficiary.id = :idbeneficiary");
-		  q.setParameter("idbeneficiary", idbeneficiary);
-	      List<Transaction> results = q.getResultList();
-	      return results;
+	   public List<Transaction> findByUser(UUID id) {
+		   Query q = entityManager.createQuery("select t from Transaction t where t.senderUser.id = :id or t.beneficiaryUser.id = :id order by t.date asc");
+		   q.setParameter("id", id);
+		   List<Transaction> results = q.getResultList();
+		   return results;
 	   }
 }
