@@ -3,8 +3,12 @@ package com.paymybuddy.webpay.model;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -28,16 +32,19 @@ public class Transaction {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-	private UUID id;
+	private String id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private User senderUser;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private User beneficiaryUser;
 	
 	private Double cashAmount;
+	
+	@Enumerated(EnumType.STRING)
 	private Currency currency;
+	
 	private String description;
 	
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)

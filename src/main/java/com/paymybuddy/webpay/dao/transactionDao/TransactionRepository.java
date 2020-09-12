@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paymybuddy.webpay.model.Transaction;
 
@@ -17,41 +18,41 @@ public class TransactionRepository implements ITransactionRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Override
-	   public Transaction findOne( UUID id ){
+	   @Transactional
+	   public Transaction findOne( String id ){
 	      return entityManager.find( Transaction.class, id );
 	   }
 	   
-	   @Override
+	   @Transactional
 	   public List< Transaction > findAll(){
 	      return entityManager.createQuery( "from " + Transaction.class.getName() )
 	       .getResultList();
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void create( Transaction transaction ){
 	      entityManager.persist( transaction );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public Transaction update( Transaction transaction ){
 	      return entityManager.merge( transaction );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void delete( Transaction transaction ){
 	      entityManager.remove( transaction );
 	   }
 	   
-	   @Override
-	   public void deleteById( UUID id ){
+	   @Transactional
+	   public void deleteById( String id ){
 		   Transaction transaction = findOne( id );
 	      delete( transaction );
 	   }
 
 	   
-	   @Override
-	   public List<Transaction> findByUser(UUID id) {
+	   @Transactional
+	   public List<Transaction> findByUser(String id) {
 		   Query q = entityManager.createQuery("select t from Transaction t where t.senderUser.id = :id or t.beneficiaryUser.id = :id order by t.date asc");
 		   q.setParameter("id", id);
 		   List<Transaction> results = q.getResultList();

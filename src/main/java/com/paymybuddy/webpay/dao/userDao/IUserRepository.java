@@ -10,7 +10,7 @@ import com.paymybuddy.webpay.model.User;
 @Component
 public interface IUserRepository {
 
-	User findOne(UUID id);
+	User findOne(String id);
 
 	List<User> findAll();
 
@@ -20,7 +20,7 @@ public interface IUserRepository {
 
 	void delete(User user);
 
-	void deleteById(UUID id);
+	void deleteById(String id);
 
 	User findByEmail(String email);
 

@@ -44,13 +44,12 @@ public class UserController {
 	
 	
 	@DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public String deleteUserProfile () {
+	public void deleteUserProfile () {
 		
-		userService.deleteUser(userDetailsService.currentUser());
-		return "redirect:/user/disconnect";
+		userService.deleteUser(userDetailsService.currentUser().getId());
 	}
 	
-	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	public User createUserProfile (@RequestBody User user) {
 		
 		return userService.createUser(user);
@@ -60,7 +59,7 @@ public class UserController {
 	@PostMapping(path = "/addFriend", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<String> addFriend (@RequestParam("email") String email) {
 		
-		userService.addContact(userDetailsService.currentUser(), email);
+		userService.addContact(userDetailsService.currentUser().getId(), email);
 		return getAllFriends();
 	}
 	

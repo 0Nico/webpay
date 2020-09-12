@@ -21,31 +21,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/user/**").hasAnyAuthority("ADMIN","USER")
+        http
+        		.httpBasic()
+        		.and()
+        		.authorizeRequests()                
+                .antMatchers("/user/**","/transaction/**","/bankAccount/**")
+                	.hasAnyAuthority("ADMIN","USER")
                 .antMatchers("/user/create").permitAll()
-                .antMatchers("/","/log/submit").permitAll()
-                .and().formLogin()
-                .defaultSuccessUrl("/user")
-                .and().logout()    //logout configuration
-                .logoutUrl("/user/disconnect")
-                .logoutSuccessUrl("/")
+                .anyRequest().denyAll()
+                .and().csrf().disable().cors()
                 .and().exceptionHandling()
-                .and()
-                .csrf()
-                .and()
-                .rememberMe().tokenValiditySeconds(20000);
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .maximumSessions(1);}
+                
+                
+                ;}
 
-    @Override
-    public void configure(WebSecurity web){
-        web
-                .ignoring()
-                .antMatchers("/resources/**");
-    }
+    
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

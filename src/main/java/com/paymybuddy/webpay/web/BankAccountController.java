@@ -33,34 +33,34 @@ public class BankAccountController {
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public BankAccountDto getBankAccount (@RequestParam("id") String id) {
 		
-		return bankAccountService.getBankAccount(UUID.fromString(id), userDetailsService.currentUser().getId());
+		return bankAccountService.getBankAccount(id, userDetailsService.currentUser().getId());
 	}
 
 	
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public BankAccount createBankAccount (@RequestBody BankAccountDto bankAccountDto) {
 		
-		return bankAccountService.createBankAccount(bankAccountDto, userDetailsService.currentUser());
+		return bankAccountService.createBankAccount(bankAccountDto, userDetailsService.currentUser().getId());
 	}
 	
 	@DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public void deleteBankAccount (@RequestParam("id") String id) {
 		
-		bankAccountService.deleteBankAccount(UUID.fromString(id), userDetailsService.currentUser().getId());
+		bankAccountService.deleteBankAccount(id, userDetailsService.currentUser().getId());
 	}
 	
 	
 	@PostMapping(path = "/addMoneyFromBank", produces=MediaType.APPLICATION_JSON_VALUE)
 	public TransactionDto addMoneyFromBankAccount (@RequestParam("cashAmount") Double cashAmount, @RequestParam("accountId") String accountId) {
 		
-		return bankAccountService.addMoneyFromBank(cashAmount, userDetailsService.currentUser().getId(), UUID.fromString(accountId));
+		return bankAccountService.addMoneyFromBank(cashAmount, userDetailsService.currentUser().getId(), accountId);
 	}
 	
 	
 	@PostMapping(path = "/sendMoneyToBank", produces=MediaType.APPLICATION_JSON_VALUE)
 	public TransactionDto sendMoneyToBankAccount (@RequestParam("cashAmount") Double cashAmount, @RequestParam("accountId") String accountId) {
 		
-		return bankAccountService.sendMoneyToBank(cashAmount, userDetailsService.currentUser().getId(), UUID.fromString(accountId));
+		return bankAccountService.sendMoneyToBank(cashAmount, userDetailsService.currentUser().getId(), accountId);
 	}
 	
 }

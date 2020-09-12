@@ -39,14 +39,14 @@ public class TransactionController {
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public TransactionDto getTransaction (@RequestParam("id") String id) {
 		
-		return transactionService.getTransaction(UUID.fromString(id), userDetailsService.currentUser().getId());
+		return transactionService.getTransaction(id, userDetailsService.currentUser().getId());
 	}
 	
 	
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public UserDto executeMoneyTransfer (@RequestBody TransactionDto transactionDto) {
 		
-		return transactionService.sendMoney(userDetailsService.currentUser(), transactionDto);
+		return transactionService.sendMoney(userDetailsService.currentUser().getId(), transactionDto);
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paymybuddy.webpay.model.Transaction;
 import com.paymybuddy.webpay.model.User;
@@ -18,39 +19,39 @@ public class UserRepository implements IUserRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Override
-	   public User findOne( UUID id ){
+	   @Transactional
+	   public User findOne( String id ){
 	      return entityManager.find( User.class, id );
 	   }
 	   
-	   @Override
+	   @Transactional
 	   public List< User > findAll(){
 	      return entityManager.createQuery( "from " + User.class.getName() )
 	       .getResultList();
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void create( User user ){
 	      entityManager.persist( user );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public User update( User user ){
 	      return entityManager.merge( user );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void delete( User user ){
 	      entityManager.remove( user );
 	   }
 	   
-	   @Override
-	   public void deleteById( UUID id ){
+	   @Transactional
+	   public void deleteById( String id ){
 	      User user = findOne( id );
 	      delete( user );
 	   }
 
-	@Override
+	   @Transactional
 	public User findByEmail(String email) {
 		Query q = entityManager.createQuery("select u from User u where u.email = :email");
 		q.setParameter("email", email);
