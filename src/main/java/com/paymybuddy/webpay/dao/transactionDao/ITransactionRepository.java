@@ -11,7 +11,7 @@ import com.paymybuddy.webpay.model.Transaction;
 @Component
 public interface ITransactionRepository {
 
-	void deleteById(UUID id);
+	void deleteById(String id);
 
 	void delete(Transaction transaction);
 
@@ -21,9 +21,9 @@ public interface ITransactionRepository {
 
 	List<Transaction> findAll();
 
-	Transaction findOne(UUID id);
+	Transaction findOne(String id);
 	
-	public List<Transaction> findByUser(@Param("id") UUID idsender);
+	public List<Transaction> findByUser(@Param("id") String idsender);
 	
 
 }

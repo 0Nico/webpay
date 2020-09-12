@@ -10,7 +10,7 @@ import com.paymybuddy.webpay.model.BankAccount;
 @Component
 public interface IBankAccountRepository {
 
-	BankAccount findOne(UUID id);
+	BankAccount findOne(String id);
 
 	List<BankAccount> findAll();
 
@@ -20,6 +20,6 @@ public interface IBankAccountRepository {
 
 	void delete(BankAccount bankAccount);
 
-	void deleteById(UUID id);
+	void deleteById(String id);
 
 }

@@ -26,7 +26,7 @@ public class BankAccountService {
 	IUserRepository userRepository;
 	
 	
-	public BankAccountDto getBankAccount(UUID id, UUID userId) {
+	public BankAccountDto getBankAccount(String id, String userId) {
 		BankAccount bankAccount = bankRepository.findOne(id);
 		if (bankAccount != null) {
     		if (bankAccount.getOwner().getId().equals(userId)) {
@@ -45,17 +45,19 @@ public class BankAccountService {
     	}
     }
 	
-	public BankAccount createBankAccount(BankAccountDto bankAccountDto, User user) {
+	public BankAccount createBankAccount(BankAccountDto bankAccountDto, String userId) {
 		BankAccount bankAccount = new BankAccount();
 		bankAccount.setBankName(bankAccountDto.getBankName());
 		bankAccount.setIban(bankAccountDto.getIban());
+		
+		User user = userRepository.findOne(userId);
 		bankAccount.setOwner(user);
 		bankRepository.create(bankAccount);
 		return bankAccount;
     }
     
 
-    public void deleteBankAccount(UUID id, UUID userId) {
+    public void deleteBankAccount(String id, String userId) {
     	BankAccount bankAccount = bankRepository.findOne(id);
 		if (bankAccount != null) {
     		if (bankAccount.getOwner().getId().equals(userId)) {
@@ -68,7 +70,7 @@ public class BankAccountService {
     	}
     }
 
-	public TransactionDto addMoneyFromBank(Double cashAmount, UUID userId, UUID accountId) {
+	public TransactionDto addMoneyFromBank(Double cashAmount, String userId, String accountId) {
 		
 		BankAccount bankAccount = bankRepository.findOne(accountId);
 		if (bankAccount != null) {
@@ -91,13 +93,13 @@ public class BankAccountService {
 		
 	}
 
-	public TransactionDto sendMoneyToBank(Double cashAmount, UUID userId, UUID accountId) {
+	public TransactionDto sendMoneyToBank(Double cashAmount, String userId, String accountId) {
 		
 		BankAccount bankAccount = bankRepository.findOne(accountId);
 		if (bankAccount != null) {
     		if (bankAccount.getOwner().getId().equals(userId)) {
     			User user = userRepository.findOne(userId);
-    			if (user.getCashAmount() <= cashAmount) {
+    			if (user.getCashAmount() > cashAmount) {
     				user.setCashAmount(user.getCashAmount() - cashAmount);
         			userRepository.update(user);
         			TransactionDto transactionDto = new TransactionDto();

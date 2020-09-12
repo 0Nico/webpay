@@ -35,7 +35,7 @@ public class UserService {
         return userRepository.findAll().stream().map(User::getEmail).collect(Collectors.toList());
     }
  
-    public UserDto getUser(UUID id) {
+    public UserDto getUser(String id) {
     	
     	User user = userRepository.findOne(id);
     	UserDto userDto = new UserDto();
@@ -51,7 +51,7 @@ public class UserService {
     	
     	User friend = user.getContacts().stream().filter(usr -> usr.getEmail().equals(email)).findAny()
     			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Friend Does Not Exist"));
-
+    	
    		UserDto userDto = new UserDto();
    		userDto.setEmail(email);
    		userDto.setFirstName(friend.getFirstName());
@@ -67,11 +67,13 @@ public class UserService {
     	}
     }
 
-    public void deleteUser(User user) {
-    	userRepository.delete(user);
+    public void deleteUser(String userId) {
+    	
+    	userRepository.deleteById(userId);
     }
     
-    public void addContact(User user, String email){	
+    public void addContact(String userId, String email){
+    	User user = userRepository.findOne(userId);
     	User contact = userRepository.findByEmail(email);
     	if(contact!= null) {
     		user.getContacts().add(contact);

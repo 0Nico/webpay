@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paymybuddy.webpay.dao.transactionDao.ITransactionRepository;
 import com.paymybuddy.webpay.model.BankAccount;
@@ -18,34 +19,34 @@ public class BankAccountRepository implements IBankAccountRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Override
-	   public BankAccount findOne( UUID id ){
+	   @Transactional
+	   public BankAccount findOne( String id ){
 	      return entityManager.find( BankAccount.class, id );
 	   }
 	   
-	   @Override
+	   @Transactional
 	   public List< BankAccount > findAll(){
 	      return entityManager.createQuery( "from " + BankAccount.class.getName() )
 	       .getResultList();
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void create( BankAccount bankAccount ){
 	      entityManager.persist( bankAccount );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public BankAccount update( BankAccount bankAccount ){
 	      return entityManager.merge( bankAccount );
 	   }
 	 
-	   @Override
+	   @Transactional
 	   public void delete( BankAccount bankAccount ){
 	      entityManager.remove( bankAccount );
 	   }
 	   
-	   @Override
-	   public void deleteById( UUID id ){
+	   @Transactional
+	   public void deleteById( String id ){
 		   BankAccount bankAccount = findOne( id );
 	      delete( bankAccount );
 	   }

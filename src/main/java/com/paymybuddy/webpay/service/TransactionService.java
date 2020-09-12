@@ -27,11 +27,9 @@ public class TransactionService {
 	@Autowired
 	IUserRepository userRepository;
 	
-	@Autowired
-	UserService userService;
 	
  
-    public TransactionDto getTransaction(UUID id, UUID userId) {
+    public TransactionDto getTransaction(String id, String userId) {
     	Transaction transaction = transactionRepository.findOne(id);
     	if (transaction != null) {
     		if (transaction.getBeneficiaryUser().getId().equals(userId) || transaction.getSenderUser().getId().equals(userId)) {
@@ -53,7 +51,7 @@ public class TransactionService {
     }
     
     
-    public List<TransactionDto> getTransactionsByUser(UUID id){
+    public List<TransactionDto> getTransactionsByUser(String id){
     	
     	List<TransactionDto> transactionDtoList = new ArrayList<TransactionDto>();
     	transactionRepository.findByUser(id).stream().forEach(transa -> {
@@ -71,33 +69,38 @@ public class TransactionService {
     }
     
     
-    public UserDto sendMoney(User user, TransactionDto transactionDto) {
+    public UserDto sendMoney(String idUser, TransactionDto transactionDto) {
  	   
- 	   Transaction transaction = new Transaction();
- 	   transaction.setCashAmount(transactionDto.getCashAmount());
- 	   User beneficiary = userRepository.findByEmail(transactionDto.getBeneficiaryEmail());
- 		   	if(beneficiary!= null) {
- 		   		transaction.setBeneficiaryUser(beneficiary);
- 		   	} else {
- 		   		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beneficiary Not Found");
- 		   	}
- 	   transaction.setSenderUser(user);
- 	   transaction.setDescription(transactionDto.getDescription());
- 	   transaction.setDate(new Date());
- 	   transaction.setCurrency(Currency.valueOf(transactionDto.getCurrency()));
- 	   
- 	   if(user.getCashAmount()>= transaction.getCashAmount()) {
- 		   user.setCashAmount(user.getCashAmount() - transaction.getCashAmount());
- 		   beneficiary.setCashAmount(beneficiary.getCashAmount() + transaction.getCashAmount());
- 		   userService.updateUser(user);
- 		   userService.updateUser(beneficiary);
- 		   transactionRepository.create(transaction);
- 	   } else {
- 		   throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Sender Could Not Send More Money Than He Have. Please Retry with a smaller amount.");
- 	   }
- 	   UserDto userDto = new UserDto();
- 	   userDto.setCashAmount(user.getCashAmount());
- 	   return userDto;
+    	User beneficiary = userRepository.findByEmail(transactionDto.getBeneficiaryEmail());
+    	if( beneficiary != null) {
+	    	
+	    	User user = userRepository.findOne(idUser);
+	    	if(user.getCashAmount()>= transactionDto.getCashAmount()) {
+	    		
+	    		user.setCashAmount(user.getCashAmount() - transactionDto.getCashAmount());
+	 		    beneficiary.setCashAmount(beneficiary.getCashAmount() + transactionDto.getCashAmount());
+	 		    userRepository.update(user);
+	 		    userRepository.update(beneficiary);
+	 		    
+		    	Transaction transaction = new Transaction();
+		 	    transaction.setCashAmount(transactionDto.getCashAmount());
+			   	transaction.setBeneficiaryUser(beneficiary);
+		 	    transaction.setSenderUser(user);
+		 	    transaction.setDescription(transactionDto.getDescription());
+		 	    transaction.setDate(new Date());
+		 	    transaction.setCurrency(Currency.valueOf(transactionDto.getCurrency()));		 	    
+	 	    	
+	 		    transactionRepository.create(transaction);
+		 	   
+		 	    UserDto userDto = new UserDto();
+		 	    userDto.setCashAmount(user.getCashAmount());
+		 	    return userDto;
+	    	 } else {
+		 		    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Sender Could Not Send More Money Than He Have. Please Retry with a smaller amount.");
+		 	    }
+    	} else {
+	   		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beneficiary Not Found");
+	   	}
     }
     
 }

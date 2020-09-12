@@ -2,8 +2,10 @@ package com.paymybuddy.webpay.model;
 
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -27,9 +29,9 @@ public class BankAccount {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-	private UUID id;
+	private String id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private User owner;
 	
 	private String iban;
