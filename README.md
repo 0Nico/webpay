@@ -15,10 +15,10 @@ Here is the domain model diagramm of the app.
 The main database script is located at src/main/resources/webpay.sql
 
 
-### 
+### Implementation of the App
 
-You can see source code of the app starting at the src folder, 
-with repository pattern and customized api
+Source code of the app start at src folder. 
+You will find repository pattern and customized api.
 
 
 
