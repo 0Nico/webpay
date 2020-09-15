@@ -77,10 +77,14 @@ public class TransactionService {
 	    	User user = userRepository.findOne(idUser);
 	    	if(user.getCashAmount()>= transactionDto.getCashAmount()) {
 	    		
+	    		User facturationUser = userRepository.findByEmail("webpay.facturation@mail.com");
+	    		facturationUser.setCashAmount(facturationUser.getCashAmount() + transactionDto.getCashAmount() * 0.05);
+	    		
 	    		user.setCashAmount(user.getCashAmount() - transactionDto.getCashAmount());
-	 		    beneficiary.setCashAmount(beneficiary.getCashAmount() + transactionDto.getCashAmount());
+	 		    beneficiary.setCashAmount(beneficiary.getCashAmount() + transactionDto.getCashAmount() * 0.95);
 	 		    userRepository.update(user);
 	 		    userRepository.update(beneficiary);
+	 		    userRepository.update(facturationUser);
 	 		    
 		    	Transaction transaction = new Transaction();
 		 	    transaction.setCashAmount(transactionDto.getCashAmount());
