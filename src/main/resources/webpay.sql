@@ -95,7 +95,8 @@ INSERT INTO `user` (`id`, `email`, `password`, `last_name`, `first_name`, `role`
 ('b9a85f0e-8e27-4203-a717-e241ed4c8fb9', 'denis.wilson@mail.com', '$2y$10$y/inWi329OXGFPAxJY0/iec.1rm3q9uBsolgLpwbBf2ulIFRbG1BK', 'Wilson', 'Denis', 'USER', 500),
 ('bbcd4322-7c5a-445a-ae57-54c29e8d52b4', 'clark.gaby@mail.com', 'wos87Hil*', 'Clark', 'Gaby', 'USER', 2000),
 ('e4af3ee4-db0f-49e8-b656-6f77854ebb10', 'luckyluc@mail.com', 'jdueLKDn872', 'Lucky', 'Luc', 'USER', 499),
-('6d2232e7-ad4b-430d-9628-c584fcfd5925', 'janet.jackson@mail.com', 'OHZPFZJobdl', 'Janet', 'Jackson', 'USER', 60000.0);
+('6d2232e7-ad4b-430d-9628-c584fcfd5925', 'janet.jackson@mail.com', 'OHZPFZJobdl', 'Janet', 'Jackson', 'USER', 60000.0),
+('cb6432e7-a88b-430d-0128-c58a74b35925', 'webpay.facturation@mail.com', 'PPJNODZ872Jobdl', 'Webpay', 'Facturation', 'ADMIN', 0.0);
 
 -- --------------------------------------------------------
 
