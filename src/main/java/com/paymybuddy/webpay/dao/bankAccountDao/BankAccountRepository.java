@@ -19,12 +19,11 @@ public class BankAccountRepository implements IBankAccountRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Transactional
 	   public BankAccount findOne( String id ){
 	      return entityManager.find( BankAccount.class, id );
 	   }
 	   
-	   @Transactional
+	   
 	   public List< BankAccount > findAll(){
 	      return entityManager.createQuery( "from " + BankAccount.class.getName() )
 	       .getResultList();
