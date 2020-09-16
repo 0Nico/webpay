@@ -18,12 +18,12 @@ public class TransactionRepository implements ITransactionRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Transactional
+	   
 	   public Transaction findOne( String id ){
 	      return entityManager.find( Transaction.class, id );
 	   }
 	   
-	   @Transactional
+	   
 	   public List< Transaction > findAll(){
 	      return entityManager.createQuery( "from " + Transaction.class.getName() )
 	       .getResultList();

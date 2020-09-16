@@ -19,12 +19,12 @@ public class UserRepository implements IUserRepository{
 	   @PersistenceContext
 	   EntityManager entityManager;
 	 
-	   @Transactional
+	   
 	   public User findOne( String id ){
 	      return entityManager.find( User.class, id );
 	   }
 	   
-	   @Transactional
+	   
 	   public List< User > findAll(){
 	      return entityManager.createQuery( "from " + User.class.getName() )
 	       .getResultList();

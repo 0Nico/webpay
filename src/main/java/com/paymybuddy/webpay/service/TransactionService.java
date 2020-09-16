@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.paymybuddy.webpay.dao.transactionDao.ITransactionRepository;
@@ -68,7 +69,7 @@ public class TransactionService {
     	return transactionDtoList;
     }
     
-    
+    @Transactional
     public UserDto sendMoney(String idUser, TransactionDto transactionDto) {
  	   
     	User beneficiary = userRepository.findByEmail(transactionDto.getBeneficiaryEmail());
